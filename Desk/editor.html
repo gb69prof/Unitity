@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#070b17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Desk · Costruisci</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-page">
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar" aria-label="Deposito delle fonti">
+      <header class="panel-header">
+        <a class="brand" href="index.html" aria-label="Torna alla copertina"><span class="brand-dot"></span>Desk</a>
+        <div class="button-row"><div class="save-status" id="saveStatus" role="status"><span></span><b>Pronto</b></div><button class="icon-button sidebar-close" id="sidebarClose" type="button" aria-label="Chiudi deposito">×</button></div>
+      </header>
+
+      <section class="panel-section">
+        <div class="section-heading"><h2>Aggiungi</h2><span>crea subito una card</span></div>
+        <div class="button-grid">
+          <label class="button primary" for="imageInput">＋ Immagine</label>
+          <input id="imageInput" class="visually-hidden" type="file" accept="image/*">
+          <label class="button primary" for="pdfInput">＋ PDF</label>
+          <input id="pdfInput" class="visually-hidden" type="file" accept="application/pdf">
+          <button class="button" id="openTextDialog" type="button">＋ Testo</button>
+          <button class="button" id="openLinkDialog" type="button">＋ Link</button>
+        </div>
+      </section>
+
+      <section class="panel-section compact">
+        <div class="section-heading"><h2>Lavoro</h2><span id="documentStats">0 card · 0 fonti</span></div>
+        <div class="button-row">
+          <button class="button small" id="exportButton" type="button">Esporta</button>
+          <label class="button small" for="importInput">Importa</label>
+          <input id="importInput" class="visually-hidden" type="file" accept="application/json,.json">
+          <button class="button small danger" id="clearDeskButton" type="button">Svuota desk</button>
+          <button class="button small danger" id="newButton" type="button">Azzera tutto</button>
+        </div>
+      </section>
+
+      <section class="sources-heading">
+        <div class="section-heading"><h2>Deposito fonti</h2><span>riutilizzabili</span></div>
+      </section>
+      <div class="sources-list" id="sourcesList"></div>
+    </aside>
+
+    <main class="workspace" aria-label="Editor del desk">
+      <header class="workspace-toolbar">
+        <div class="toolbar-group">
+          <button class="icon-button sidebar-toggle" id="sidebarToggle" type="button" aria-label="Mostra o nascondi deposito" aria-expanded="true">☰</button>
+          <div class="segmented" aria-label="Modalità di lavoro">
+            <button class="mode-button active" data-mode="move" type="button">Muovi</button>
+            <button class="mode-button" data-mode="pan" type="button">Pan</button>
+            <button class="mode-button" data-mode="connect" type="button">Connetti</button>
+            <button class="mode-button" data-mode="delete" type="button">Cancella</button>
+          </div>
+        </div>
+        <div class="toolbar-group view-tools">
+          <label class="color-control" title="Colore dei collegamenti"><span>Linea</span><input id="connectorColor" type="color" value="#6ae4ff"></label>
+          <button class="button small" id="clearConnectorsButton" type="button">Cancella linee</button>
+          <button class="icon-button" id="zoomOut" type="button" aria-label="Riduci zoom">−</button>
+          <output class="zoom-label" id="zoomLabel">100%</output>
+          <button class="icon-button" id="zoomIn" type="button" aria-label="Aumenta zoom">＋</button>
+          <button class="button small" id="fitButton" type="button">Adatta</button>
+          <button class="button small" id="resetViewButton" type="button">Centra</button>
+          <a class="button small" href="presentation.html">Presenta</a>
+        </div>
+      </header>
+
+      <div class="mode-hint" id="modeHint">Trascina l'intestazione di una card. Tocca due volte una card per aprirla.</div>
+      <section class="desk-viewport" id="deskViewport" aria-label="Superficie infinita del desk">
+        <div class="desk-content" id="deskContent">
+          <div class="grid-layer" aria-hidden="true"></div>
+          <svg class="connector-layer" id="connectorLayer" viewBox="0 0 8000 8000" aria-hidden="true"></svg>
+        </div>
+        <div class="empty-desk" id="emptyDesk">
+          <span>✦</span>
+          <strong>Il desk è vuoto</strong>
+          <small>Aggiungi una fonte dal deposito per cominciare.</small>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="dialog" id="sourceDialog">
+    <form method="dialog" id="sourceForm">
+      <header><div><span class="eyebrow" id="dialogEyebrow">NUOVA FONTE</span><h2 id="dialogTitle">Aggiungi testo</h2></div><button class="icon-button" value="cancel" aria-label="Chiudi">×</button></header>
+      <label>Titolo<input id="sourceTitle" maxlength="120" autocomplete="off" required></label>
+      <label id="textField">Testo<textarea id="sourceText" rows="10" placeholder="Scrivi o incolla il testo…"></textarea></label>
+      <label id="urlField" hidden>Indirizzo<input id="sourceUrl" inputmode="url" placeholder="https://…"></label>
+      <label class="type-choice" id="typeField" hidden><span>Tipo</span><select id="sourceType"><option value="web">Pagina web</option><option value="video">Video</option></select></label>
+      <footer><button class="button" value="cancel">Annulla</button><button class="button primary" id="confirmSource" value="default">Aggiungi al desk</button></footer>
+    </form>
+  </dialog>
+
+  <dialog class="viewer-dialog" id="viewerDialog">
+    <div class="viewer-shell">
+      <header><h2 id="viewerTitle">Contenuto</h2><div class="button-row"><a class="button small" id="externalLink" target="_blank" rel="noopener noreferrer" hidden>Apri fuori</a><button class="icon-button" id="closeViewer" type="button" aria-label="Chiudi">×</button></div></header>
+      <div class="viewer" id="viewer"></div>
+    </div>
+  </dialog>
+
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/register-sw.js"></script>
+</body>
+</html>

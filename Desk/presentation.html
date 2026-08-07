@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#070b17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Desk · Presenta</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="app-page presentation-page">
+  <main class="presentation-shell">
+    <header class="presentation-toolbar">
+      <a class="brand" href="index.html" aria-label="Torna alla copertina"><span class="brand-dot"></span>Desk <small>Presentazione</small></a>
+      <div class="toolbar-group">
+        <label class="button small" for="presentationImport">Importa JSON</label>
+        <input id="presentationImport" class="visually-hidden" type="file" accept="application/json,.json">
+        <button class="button small" id="fitButton" type="button">Adatta</button>
+        <button class="icon-button" id="zoomOut" type="button" aria-label="Riduci zoom">−</button>
+        <output class="zoom-label" id="zoomLabel">100%</output>
+        <button class="icon-button" id="zoomIn" type="button" aria-label="Aumenta zoom">＋</button>
+        <a class="button small" href="editor.html">Modifica</a>
+      </div>
+    </header>
+    <section class="desk-viewport" id="deskViewport" aria-label="Desk in presentazione">
+      <div class="desk-content" id="deskContent">
+        <div class="grid-layer" aria-hidden="true"></div>
+        <svg class="connector-layer" id="connectorLayer" viewBox="0 0 8000 8000" aria-hidden="true"></svg>
+      </div>
+      <div class="empty-desk" id="emptyDesk">
+        <span>▶</span><strong>Nessun desk da presentare</strong><small>Crea un lavoro nell'editor oppure importa un file JSON.</small>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog class="viewer-dialog" id="viewerDialog">
+    <div class="viewer-shell">
+      <header><h2 id="viewerTitle">Contenuto</h2><div class="button-row"><a class="button small" id="externalLink" target="_blank" rel="noopener noreferrer" hidden>Apri fuori</a><button class="button small" id="fullscreenViewer" type="button">Schermo intero</button><button class="icon-button" id="closeViewer" type="button" aria-label="Chiudi">×</button></div></header>
+      <div class="viewer" id="viewer"></div>
+    </div>
+  </dialog>
+
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/presentation.js"></script>
+  <script src="js/register-sw.js"></script>
+</body>
+</html>
