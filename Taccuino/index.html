@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Taccuino">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>Taccuino</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand" aria-label="Taccuino">Taccuino</div>
+    <nav class="mode-tabs" aria-label="Modalità">
+      <button class="tab active" type="button" data-view="notes" aria-pressed="true">Appunti</button>
+      <button class="tab" type="button" data-view="drawing" aria-pressed="false">Disegno</button>
+      <button class="tab" type="button" data-view="archive" aria-pressed="false">Archivio</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section id="notesView" class="view active" aria-labelledby="notesHeading">
+      <div class="compact-bar">
+        <h1 id="notesHeading" class="sr-only">Appunti</h1>
+        <input id="noteTitle" class="title-input" type="text" maxlength="120" placeholder="Titolo dell’appunto" autocomplete="off">
+        <div class="actions">
+          <button id="newNoteBtn" class="btn" type="button">Nuovo</button>
+          <button id="saveNoteBtn" class="btn primary" type="button">Salva</button>
+          <button id="exportTxtBtn" class="btn" type="button">TXT</button>
+        </div>
+      </div>
+      <textarea id="noteText" class="note-paper" spellcheck="true" autocapitalize="sentences" placeholder="Scrivi qui…"></textarea>
+      <div id="noteStatus" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="drawingView" class="view drawing-view" aria-labelledby="drawingHeading" hidden>
+      <div class="compact-bar drawing-title-bar">
+        <h1 id="drawingHeading" class="sr-only">Disegno</h1>
+        <input id="drawingTitle" class="title-input" type="text" maxlength="120" placeholder="Titolo del disegno" autocomplete="off">
+        <div class="actions">
+          <button id="newDrawingBtn" class="btn" type="button">Nuovo</button>
+          <button id="saveDrawingBtn" class="btn primary" type="button">Salva</button>
+          <button id="exportJpgBtn" class="btn" type="button">JPG</button>
+        </div>
+      </div>
+
+      <div class="drawing-toolbar" role="toolbar" aria-label="Strumenti di disegno">
+        <div class="tool-group colors" aria-label="Colori">
+          <button class="color-dot selected" type="button" data-color="#111111" aria-label="Nero" title="Nero"></button>
+          <button class="color-dot red" type="button" data-color="#d7263d" aria-label="Rosso" title="Rosso"></button>
+          <button class="color-dot green" type="button" data-color="#18864b" aria-label="Verde" title="Verde"></button>
+          <button class="color-dot blue" type="button" data-color="#1769d2" aria-label="Blu" title="Blu"></button>
+        </div>
+        <span class="divider" aria-hidden="true"></span>
+        <div class="tool-group widths" aria-label="Spessore">
+          <button class="tool-btn selected" type="button" data-width="2" title="Sottile"><span class="line-sample thin"></span><span class="sr-only">Sottile</span></button>
+          <button class="tool-btn" type="button" data-width="5" title="Medio"><span class="line-sample medium"></span><span class="sr-only">Medio</span></button>
+          <button class="tool-btn" type="button" data-width="10" title="Spesso"><span class="line-sample thick"></span><span class="sr-only">Spesso</span></button>
+        </div>
+        <span class="divider" aria-hidden="true"></span>
+        <div class="tool-group">
+          <button id="penBtn" class="tool-btn selected" type="button" aria-pressed="true" title="Penna">✎ <span class="tool-label">Penna</span></button>
+          <button id="eraserBtn" class="tool-btn" type="button" aria-pressed="false" title="Gomma">⌫ <span class="tool-label">Gomma</span></button>
+          <button id="undoBtn" class="tool-btn" type="button" title="Annulla" disabled>↶ <span class="sr-only">Annulla</span></button>
+          <button id="redoBtn" class="tool-btn" type="button" title="Ripristina" disabled>↷ <span class="sr-only">Ripristina</span></button>
+          <button id="clearCanvasBtn" class="tool-btn danger" type="button" title="Cancella pagina">× <span class="tool-label">Cancella</span></button>
+        </div>
+      </div>
+
+      <div id="canvasShell" class="canvas-shell">
+        <canvas id="drawingCanvas" aria-label="Foglio da disegno"></canvas>
+      </div>
+      <div id="drawingStatus" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="archiveView" class="view archive-view" aria-labelledby="archiveHeading" hidden>
+      <div class="archive-header">
+        <div>
+          <h1 id="archiveHeading">Archivio</h1>
+          <p>Le pagine restano su questo dispositivo.</p>
+        </div>
+        <button id="refreshArchiveBtn" class="btn" type="button">Aggiorna</button>
+      </div>
+      <div id="archiveList" class="archive-list"></div>
+      <div id="archiveEmpty" class="empty-state" hidden>Nessuna pagina salvata.</div>
+    </section>
+  </main>
+
+  <script src="./js/storage.js" defer></script>
+  <script src="./js/drawing.js" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>
